@@ -11,6 +11,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.weatherdiary.databinding.ActivityMapsBinding
 
+//TODO: add button to get to diary activity
+
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
@@ -44,5 +46,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        //will use on single tap? to put down marker.
+        // Could get current location from android to help/zoom in?
+        //have two buttons for navi between second and third views
     }
 }

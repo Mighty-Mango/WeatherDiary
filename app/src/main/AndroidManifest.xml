@@ -13,7 +13,6 @@
         tools:targetApi="31">
 
         <!--
-             TODO: Before you run your application, you need a Google Maps API key.
 
              To get one, follow the directions here:
 
@@ -25,20 +24,22 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="AIzaSyDpKV6zmb_kNY-uum9DymOoROTDzGzwzcQ" />
 
         <activity
             android:name=".MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
         </activity>
     </application>
 
