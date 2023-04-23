@@ -2,15 +2,11 @@ package com.example.weatherdiary
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
+import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -21,15 +17,22 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.weatherdiary.databinding.ActivityMapsBinding
-import com.google.android.gms.maps.UiSettings
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.Marker
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
+
+    //could also implement onmapclicklistener?
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var locMarker: Marker
     private var locationPermissionGranted : Boolean = true
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private var lastKnownLocation: Location? = null
+    private val defaultLocation = LatLng(38.9869, -76.9426) //UMD
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +45,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
     }
 
 
@@ -58,21 +64,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true //allow zoom buttons
         getLocationPermission()
+        updateLocationUI()
+        getDeviceLocation()
 
-        if(!mMap.isMyLocationEnabled) {
-            // Add a marker in Sydney and move the camera
-            val umd = LatLng(38.9869, -76.9426)
-            mMap.addMarker(MarkerOptions().position(umd).title("Marker in UMD"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(umd))
-        }else{
-          //  mMap.uiSettings.isMapToolbarEnabled = true
-            mMap.uiSettings.isMyLocationButtonEnabled = true
-
-        }
-    //should try to change above to be around phone's location?
 
         mMap.setOnMapClickListener {
-            Log.w("Testing", "LatLong is: " + it)
+            Log.w("TESTING", "LatLong is: " + it)
             mMap.clear()
             locMarker = mMap.addMarker(MarkerOptions().position(it))!! //lets see if this causes issues
             mMap.moveCamera(CameraUpdateFactory.newLatLng(it)) //center camera
@@ -81,7 +78,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         //have two buttons for navi between second and third views
     }
 
-    //these 3 are taken from Google Maps API example code
+    //below functions are taken from Google Maps API example code
     private fun getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -133,5 +130,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
         }
+    }
+
+    private fun getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+        try {
+            if (locationPermissionGranted) {
+                val locationResult = fusedLocationProviderClient.lastLocation
+                locationResult.addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Set the map's camera position to the current location of the device.
+                        lastKnownLocation = task.result
+                        if (lastKnownLocation != null) {
+                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                LatLng(lastKnownLocation!!.latitude,
+                                    lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()))
+                        }
+                    } else {
+                        mMap?.moveCamera(CameraUpdateFactory
+                            .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
+                        mMap?.uiSettings?.isMyLocationButtonEnabled = false
+                    }
+                }
+            }
+        } catch (e: SecurityException) {
+            Log.e("Exception: %s", e.message, e)
+        }
+    }
+    companion object {
+        private const val DEFAULT_ZOOM = 15
     }
 }
