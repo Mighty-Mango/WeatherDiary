@@ -21,6 +21,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.Marker
 
+
+
+//NEED TO DO: get name of location where marker is on, add navigation buttons to switch between views
+//permanent storage
+
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
     //could also implement onmapclicklistener?
