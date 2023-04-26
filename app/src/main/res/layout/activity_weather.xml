@@ -36,47 +36,12 @@
         style="@style/TextStyle"
         android:layout_below="@+id/temperature" />
 
-    <TextView
-        android:id="@+id/uv"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="UV Index "
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="20dp"
-        style="@style/TextStyle"
-        android:layout_below="@+id/weather" />
-
-    <TextView
-        android:id="@+id/humidity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Humidity "
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="20dp"
-        style="@style/TextStyle"
-        android:layout_toRightOf="@+id/uv"
-        android:layout_below="@+id/weather"/>
-
-    <TextView
-        android:id="@+id/wind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Wind "
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="20dp"
-        style="@style/TextStyle"
-        android:layout_below="@+id/uv"/>
-
-    <TextView
-        android:id="@+id/airQuality"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Air Quality "
-        android:layout_marginTop="50dp"
-        style="@style/TextStyle"
-        android:layout_toRightOf="@+id/wind"
-        android:layout_alignLeft="@id/humidity"
-        android:layout_below="@+id/uv"/>
+        android:id="@+id/recyclerview"
+        android:layout_below="@id/weather"/>
 
     <TextView
         android:id="@+id/button"
@@ -87,7 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
         style="@style/ButtonStyle"
-        android:layout_below="@+id/airQuality"/>
+        android:layout_below="@+id/recyclerview"/>
 
 
 
