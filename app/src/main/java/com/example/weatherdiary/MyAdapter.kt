@@ -5,15 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter : RecyclerView.Adapter<MyViewHolder>{
-    lateinit var context : Context
-    var items = listOf<Item>()
-
-    constructor(context: Context, items : List<Item>){
-        this.context = context
-        this.items = items
-    }
-
+class MyAdapter(var context: Context, var items: List<Item>) :
+    RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false))

@@ -11,17 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Location: "
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         style="@style/TextStyle"
         />
 
-    <TextView
+    <EditText
         android:id="@+id/temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Temperature: "
-        android:layout_marginTop="50dp"
+        android:hint="Enter Temperature Here"
+        android:inputType="number"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         style="@style/TextStyle"
         android:layout_below="@+id/location" />
@@ -30,16 +31,27 @@
         android:id="@+id/weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Weather: "
-        android:layout_marginTop="50dp"
+        android:text="Select Weather: "
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
+        style="@style/TextStyle"
+        android:layout_below="@+id/temperature" />
+
+    <TextView
+        android:id="@+id/selectedWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="   "
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@id/weather"
+        android:layout_marginLeft="10dp"
         style="@style/TextStyle"
         android:layout_below="@+id/temperature" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:id="@+id/recyclerview"
         android:layout_below="@id/weather"/>
 
@@ -50,7 +62,7 @@
         android:layout_height="wrap_content"
         android:text="Journal"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         style="@style/ButtonStyle"
         android:layout_below="@+id/recyclerview"/>
 
