@@ -14,10 +14,10 @@
         android:theme="@style/Theme.WeatherDiary"
         tools:targetApi="31">
 
-        
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDpKV6zmb_kNY-uum9DymOoROTDzGzwzcQ" />
+            android:value="AIzaSyC3706E2bI4ajLHdor6tUCzZ111pp27Na0" />
 
         <activity
             android:name=".MapsActivity"
