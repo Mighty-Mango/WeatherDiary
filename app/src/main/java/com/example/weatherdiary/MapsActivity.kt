@@ -25,14 +25,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.Marker
 
-
-
-//NEED TO DO: get name of location where marker is on, add navigation buttons to switch between views
-//permanent storage
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
-
-    //could also implement onmapclicklistener?
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -43,8 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     private val defaultLocation = LatLng(38.9869, -76.9426) //UMD
     private lateinit var locButton : Button
     private lateinit var listButton : Button
-    private var city_state : String = "Not Set Yet"
-
+    private var cityState : String = "Not Set Yet"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,10 +54,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         locButton = findViewById(R.id.gotoview2)
         listButton = findViewById(R.id.gotoview3)
 
-
         locButton.setOnClickListener{
             Log.w("BUTTON", "Go to second view")
-            Log.w("BUTTON", "City, State is " + city_state)
+            Log.w("BUTTON", "City, State is " + cityState)
         }
 
         listButton.setOnClickListener{
@@ -92,7 +83,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         updateLocationUI()
         getDeviceLocation()
 
-
         var geocoder : Geocoder = Geocoder( this )
         var handler : GeocodingHandler = GeocodingHandler()
 
@@ -112,11 +102,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                 locMarker.position.longitude, 5, handler)
         }
 
-
     }
 
 
-    //below functions are taken from Google Maps API example code
+    //below functions are taken from Google Maps API example code with added variables/UI stuff
     private fun getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -218,15 +207,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     inner class GeocodingHandler : Geocoder.GeocodeListener {
         override fun onGeocode(addresses: MutableList<Address>) {
             if( addresses != null ) {
-                var latitude: Double = addresses[0].latitude
-                var longitude: Double = addresses[0].longitude
-                var entireAdd : String = addresses[0].getAddressLine(0) //entire add
+
                 var cityAdd : String = addresses[0].locality //city
                 var stateAdd : String = addresses[0].adminArea //state
-                city_state = "$cityAdd, $stateAdd"
+                cityState = "$cityAdd, $stateAdd"
 
-                Log.w("TESTING", "City and state: " + city_state)
-                Log.w("MainActivity", "(lat,long) = ($latitude, $longitude)")
+                Log.w("MainActivity", "City and state: " + cityState)
             } else
                 Log.w( "MainActivity", "Sorry, no results" )
         }
