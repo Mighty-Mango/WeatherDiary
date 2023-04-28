@@ -100,6 +100,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
             geocoder.getFromLocation(locMarker.position.latitude,
                 locMarker.position.longitude, 5, handler)
+
         }
 
     }
