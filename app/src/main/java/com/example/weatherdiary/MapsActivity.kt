@@ -36,7 +36,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     private val defaultLocation = LatLng(38.9869, -76.9426) //UMD
     private lateinit var locButton : Button
     private lateinit var listButton : Button
-    private var cityState : String = "Not Set Yet"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +48,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        //needed for geocoder
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        locButton = findViewById(R.id.gotoview2)
-        listButton = findViewById(R.id.gotoview3)
+        //init buttons
+        locButton = findViewById(R.id.gotoview2) //button to transfer to second view + pass cityState
+        listButton = findViewById(R.id.gotoview3) //button to go directly to diary list
 
         locButton.setOnClickListener{
             Log.w("BUTTON", "Go to second view")
-            Log.w("BUTTON", "City, State is " + cityState)
+          //  Log.w("BUTTON", "City, State is " + cityState)
+            Log.w("BUTTON", "City State Companion: " + CITY_STATE)
         }
 
         listButton.setOnClickListener{
@@ -83,14 +85,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         updateLocationUI()
         getDeviceLocation()
 
+
         var geocoder : Geocoder = Geocoder( this )
         var handler : GeocodingHandler = GeocodingHandler()
-
-        if(::locMarker.isInitialized){
-            Log.w("TESTING", "MARKER HAS A VALUE")
-        }else{
-            Log.w("TESTING", "MARKER IS EMPTY")
-        }
 
         mMap.setOnMapClickListener {
             Log.w("TESTING", "LatLong is: " + it)
@@ -102,17 +99,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                 locMarker.position.longitude, 5, handler)
 
         }
-
     }
 
 
-    //below functions are taken from Google Maps API example code with added variables/UI stuff
+    //below functions are mostly from Google Maps API example/sample
+    // code with added variables/UI stuff
     private fun getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
+
+        //no need for fine location, just asking for COARSE_LOCATION perm
+
         if (ContextCompat.checkSelfPermission(this.applicationContext,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
@@ -122,6 +122,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                 1)
         }
     }
+
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
                                             grantResults: IntArray) {
@@ -145,13 +146,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
         try {
             if (locationPermissionGranted) {
-                mMap?.isMyLocationEnabled = true
-                mMap?.uiSettings?.isMyLocationButtonEnabled = true
+                mMap.isMyLocationEnabled = true
+                mMap.uiSettings.isMyLocationButtonEnabled = true
 
                 Log.w("TESTING", "Permission Granted")
             } else {
-                mMap?.isMyLocationEnabled = false
-                mMap?.uiSettings?.isMyLocationButtonEnabled = false
+                mMap.isMyLocationEnabled = false
+                mMap.uiSettings.isMyLocationButtonEnabled = false
                 getLocationPermission()
                 Log.w("TESTING", "NO Permission Granted")
             }
@@ -174,7 +175,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.result
                         if (lastKnownLocation != null) {
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 LatLng(lastKnownLocation!!.latitude,
                                     lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()))
                             //below places default marker at lastknownlocation/currentlocation
@@ -182,20 +183,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                             locMarker = mMap.addMarker(
                                 MarkerOptions().position(
                                     LatLng(lastKnownLocation!!.latitude,lastKnownLocation!!.longitude)))!!
-                            Log.w("TESTING", "MARKER HAS BEEN SET TO LAST LOC")
+                            Log.w("MapsActivity", "MARKER HAS BEEN SET TO LAST LOC")
 
-                            //adding geocoder code here to ensure phone location can be chosen w/o user clicking
-
+                            //adding geocoder code here to ensure phone location can be chosen w/o user clicking on screen
                             var geocoder : Geocoder = Geocoder( this )
                             var handler : GeocodingHandler = GeocodingHandler()
                             geocoder.getFromLocation(locMarker.position.latitude,
                                 locMarker.position.longitude, 5, handler)
-
                         }
                     } else {
-                        mMap?.moveCamera(CameraUpdateFactory
+                        Log.w("MapsActivity", "Last Location Unknown, using default loc")
+                        mMap.moveCamera(CameraUpdateFactory
                             .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
-                        mMap?.uiSettings?.isMyLocationButtonEnabled = false
+                        mMap.uiSettings.isMyLocationButtonEnabled = false
+                        CITY_STATE = "College Park, Maryland" //hardcoded for ease
+                        //use default(UMD) if location permissions not allowed or last location not available
                     }
                 }
             }
@@ -208,19 +210,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     inner class GeocodingHandler : Geocoder.GeocodeListener {
         override fun onGeocode(addresses: MutableList<Address>) {
             if( addresses != null ) {
-
                 var cityAdd : String = addresses[0].locality //city
                 var stateAdd : String = addresses[0].adminArea //state
-                cityState = "$cityAdd, $stateAdd"
-
-                Log.w("MainActivity", "City and state: " + cityState)
+                CITY_STATE = "$cityAdd, $stateAdd" //have both vars currently will fix once tested
+                Log.w("MapsActivity", "City and state: " + CITY_STATE)
             } else
-                Log.w( "MainActivity", "Sorry, no results" )
+                Log.w( "MapsActivity", "Sorry, no results" )
         }
-
     }
 
     companion object {
         private const val DEFAULT_ZOOM = 16
+        lateinit var CITY_STATE : String //can use this to get citystate in other activity
     }
 }
