@@ -77,7 +77,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
      * installed Google Play services and returned to the app.
      */
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true //allow zoom buttons
@@ -161,7 +160,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -206,7 +204,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     inner class GeocodingHandler : Geocoder.GeocodeListener {
         override fun onGeocode(addresses: MutableList<Address>) {
             if( addresses != null ) {
