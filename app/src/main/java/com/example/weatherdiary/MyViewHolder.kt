@@ -10,10 +10,14 @@ class MyViewHolder : RecyclerView.ViewHolder {
 
     var imageView : ImageView
     var weatherTypeView: TextView
+    var temperature : TextView
+    var location : TextView
 
-    constructor(itemView : View) : super(itemView) {
+    constructor(itemView : View, activityWeather : View) : super(itemView) {
         imageView = itemView.findViewById(R.id.imageview)
         weatherTypeView = itemView.findViewById(R.id.weatherType)
+        temperature : Text
+
 
         itemView.setOnClickListener{
             Log.w("CMSC", "Selected Weather: " + weatherTypeView.text)

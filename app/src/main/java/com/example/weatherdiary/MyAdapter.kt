@@ -9,7 +9,7 @@ class MyAdapter(var context: Context, var items: List<Item>) :
     RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false))
+        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false), LayoutInflater.from(context).inflate(R.layout.activity_weather, parent, false))
     }
 
     override fun getItemCount(): Int {
