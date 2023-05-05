@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,18 +34,43 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var locMarker: Marker
-    private var locationPermissionGranted : Boolean = true
+    private var locationPermissionGranted : Boolean = false
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var lastKnownLocation: Location? = null
     private val defaultLocation = LatLng(38.9869, -76.9426) //UMD
     private lateinit var locButton : Button
     private lateinit var listButton : Button
 
+    //currently testing permissions like we did in class
+
+    private var permission : String = Manifest.permission.ACCESS_COARSE_LOCATION
+    private lateinit var launcher : ActivityResultLauncher<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //TESTING BETWEEN HERE AND Obtain the .....
+
+        // check if permission to use the coarse loc has already been granted
+        var grantedPermission : Int =
+            ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION )
+        if( grantedPermission == PackageManager.PERMISSION_GRANTED ) {
+            // permission has been granted, start using the camera
+            Log.w( "MainActivity", "permission was previously granted" )
+        } else {
+            // need to ask for permission ton use the camera
+            Log.w( "MainActivity", "permission was NOT previously granted" )
+            var contract : ActivityResultContracts.RequestPermission =
+                ActivityResultContracts.RequestPermission( )
+            var results : Results = Results( )
+            launcher = registerForActivityResult( contract, results )
+            launcher.launch( permission )
+        }
+
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -63,7 +91,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             var myIntent : Intent = Intent( this, SecondActivity::class.java )
             myIntent.putExtra("location", CITY_STATE)
             startActivity( myIntent )
-
         }
 
         listButton.setOnClickListener{
@@ -71,6 +98,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
 
     }
+
 
     /**
      * Manipulates the map once available.
@@ -85,10 +113,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true //allow zoom buttons
-        getLocationPermission()
+//        getLocationPermission()
         updateLocationUI()
-        getDeviceLocation()
-
+//        getDeviceLocation()
 
         var geocoder : Geocoder = Geocoder( this )
         var handler : GeocodingHandler = GeocodingHandler()
@@ -105,47 +132,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-
-    //below functions are mostly from Google Maps API example/sample
-    // code with added variables/UI stuff
-    private fun getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-
-        //no need for fine location, just asking for COARSE_LOCATION perm
-
-        if (ContextCompat.checkSelfPermission(this.applicationContext,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
-        } else {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                1)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
-        locationPermissionGranted = false
-        when (requestCode) {
-            1 -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationPermissionGranted = true
-                }
+    inner class Results : ActivityResultCallback<Boolean> {
+        override fun onActivityResult(result: Boolean?) {
+            if( result != null && result == true ) {
+                Log.w("MainActivity", "Permission Granted !!!")
+                locationPermissionGranted = true
+            }else {
+                Log.w("MainActivity", "Sorry, permission NOT granted")
+                locationPermissionGranted = false
             }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+            updateLocationUI()
         }
-        updateLocationUI()
     }
+
 
     private fun updateLocationUI() {
         if (mMap == null) {
+            Log.w("MapsActivity", "Somehow you managed to have a null map")
             return
         }
         try {
@@ -157,9 +161,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             } else {
                 mMap.isMyLocationEnabled = false
                 mMap.uiSettings.isMyLocationButtonEnabled = false
-                getLocationPermission()
+
+                //getLocationPermission()
                 Log.w("TESTING", "NO Permission Granted")
             }
+            getDeviceLocation()
+
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
         }
@@ -196,17 +203,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                         }
                     } else {
                         Log.w("MapsActivity", "Last Location Unknown, using default loc")
-                        mMap.moveCamera(CameraUpdateFactory
-                            .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
-                        mMap.uiSettings.isMyLocationButtonEnabled = false
-                        CITY_STATE = "College Park, Maryland" //hardcoded for ease
+
+                        setDefaultLoc()
                         //use default(UMD) if location permissions not allowed or last location not available
                     }
                 }
+            } else{ //no loc permission
+                setDefaultLoc()
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
         }
+    }
+
+    fun setDefaultLoc() : Unit{
+        mMap.moveCamera(CameraUpdateFactory
+            .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
+
+        locMarker = mMap.addMarker(MarkerOptions().position(defaultLocation))!!
+
+        mMap.uiSettings.isMyLocationButtonEnabled = false //i don't think this is needed
+        CITY_STATE = "College Park, Maryland" //hardcoded for ease
     }
 
     inner class GeocodingHandler : Geocoder.GeocodeListener {
