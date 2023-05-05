@@ -21,6 +21,8 @@
 
         <activity
             android:name=".MapsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,11 +30,6 @@
 
             </intent-filter>
         </activity>
-
-        <activity android:name=".SecondActivity"
-                  android:screenOrientation="portrait">
-        </activity>
-
 
     </application>
 
