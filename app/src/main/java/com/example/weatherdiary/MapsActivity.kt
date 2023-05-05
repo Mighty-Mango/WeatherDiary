@@ -83,7 +83,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
         locButton.setOnClickListener{
             Log.w("BUTTON", "Go to second view")
-          //  Log.w("BUTTON", "City, State is " + cityState)
+            //  Log.w("BUTTON", "City, State is " + cityState)
             Log.w("BUTTON", "City State Companion: " + CITY_STATE)
             var myIntent : Intent = Intent( this, SecondActivity::class.java )
             myIntent.putExtra("location", CITY_STATE)
@@ -214,6 +214,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     }
 
     private fun setDefaultLoc() : Unit{
+
+        mMap.clear()
+
         mMap.moveCamera(CameraUpdateFactory
             .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
 
