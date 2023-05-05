@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,8 +13,6 @@ import android.widget.Button
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -146,7 +143,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-
     private fun updateLocationUI() {
         if (mMap == null) {
             Log.w("MapsActivity", "Somehow you managed to have a null map")
@@ -165,6 +161,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                 //getLocationPermission()
                 Log.w("TESTING", "NO Permission Granted")
             }
+
             getDeviceLocation()
 
         } catch (e: SecurityException) {
@@ -203,12 +200,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                         }
                     } else {
                         Log.w("MapsActivity", "Last Location Unknown, using default loc")
-
                         setDefaultLoc()
                         //use default(UMD) if location permissions not allowed or last location not available
                     }
                 }
-            } else{ //no loc permission
+            }
+            else{ //no loc permission
                 setDefaultLoc()
             }
         } catch (e: SecurityException) {
@@ -216,7 +213,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-    fun setDefaultLoc() : Unit{
+    private fun setDefaultLoc() : Unit{
         mMap.moveCamera(CameraUpdateFactory
             .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
 
