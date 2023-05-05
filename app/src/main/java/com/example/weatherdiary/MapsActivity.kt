@@ -196,9 +196,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                         }
                     } else {
                         Log.w("MapsActivity", "Last Location Unknown, using default loc")
+
+                        locMarker = mMap.addMarker(
+                            MarkerOptions().position(defaultLocation))!!
                         mMap.moveCamera(CameraUpdateFactory
                             .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
                         mMap.uiSettings.isMyLocationButtonEnabled = false
+
                         CITY_STATE = "College Park, Maryland" //hardcoded for ease
                         //use default(UMD) if location permissions not allowed or last location not available
                     }
