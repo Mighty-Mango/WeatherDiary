@@ -1,6 +1,7 @@
 package com.example.weatherdiary
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -59,6 +60,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             Log.w("BUTTON", "Go to second view")
           //  Log.w("BUTTON", "City, State is " + cityState)
             Log.w("BUTTON", "City State Companion: " + CITY_STATE)
+            var myIntent : Intent = Intent( this, SecondActivity::class.java )
+            startActivity( myIntent )
+
         }
 
         listButton.setOnClickListener{
