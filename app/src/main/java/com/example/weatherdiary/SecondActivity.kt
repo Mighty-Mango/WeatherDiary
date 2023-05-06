@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Date
@@ -18,13 +16,22 @@ class SecondActivity : AppCompatActivity() {
 
     private lateinit var datePickerDialog : DatePickerDialog
     private lateinit var dateButton : TextView
+    private lateinit var location : TextView
+
+    private var tempString = "INVALID"
+    private var dateString = "INVALID"
+    private var weatherString = "INVALID"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
 
         initDatePicker()
         dateButton = findViewById(R.id.selectedDateButton)
-        dateButton.setText(getTodaysDate())
+        dateButton.text = getTodaysDate()
+
+        location = findViewById(R.id.location)
+        location.text = MapsActivity.CITY_STATE
 
         var loc:String = intent.extras?.getString("location") ?: "No location found"
         Log.w("SecondActivity", "Location is: " + loc)
@@ -57,7 +64,7 @@ class SecondActivity : AppCompatActivity() {
 
                 datePicker: DatePicker, year: Int, month: Int, day: Int ->
             var date : String = makeDateString(day, month, year)
-            dateButton.setText(date)
+            dateButton.text = date
         }
 
         var cal : Calendar = Calendar.getInstance()
@@ -106,5 +113,23 @@ class SecondActivity : AppCompatActivity() {
 
     public fun datePicker (view : View) {
         datePickerDialog.show()
+    }
+
+    fun saveItems(view : View){
+        location = findViewById(R.id.location)
+        var temperature : EditText = findViewById(R.id.temperature)
+        var date : TextView = findViewById(R.id.selectedDateButton)
+        var weatherType = MyViewHolder.WEATHER_TYPE
+
+        if(temperature.text.isEmpty() || weatherType.isEmpty()){
+            var initToast : Toast = Toast.makeText(this, "Please Submit Something For All Fields", Toast.LENGTH_LONG)
+            initToast.show()
+            return
+        }
+
+        Log.w("CMSC", arrayListOf<CharSequence>(location.text,
+            temperature.text,
+            date.text,
+            weatherType).toString())
     }
 }

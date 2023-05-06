@@ -10,7 +10,6 @@
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location: "
         android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
         style="@style/TextStyle"
@@ -62,7 +61,6 @@
         android:id="@+id/selectedDateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Date"
         android:layout_marginTop="30dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
@@ -87,7 +85,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         style="@style/ButtonStyle"
-        android:layout_below="@+id/recyclerview"/>
+        android:layout_below="@+id/recyclerview"
+        android:onClick="saveItems"/>
 
 
 
