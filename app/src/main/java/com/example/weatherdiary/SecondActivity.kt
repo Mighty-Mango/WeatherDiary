@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.DatePicker
@@ -24,6 +25,9 @@ class SecondActivity : AppCompatActivity() {
         initDatePicker()
         dateButton = findViewById(R.id.selectedDateButton)
         dateButton.setText(getTodaysDate())
+
+        var loc:String = intent.extras?.getString("location") ?: "No location found"
+        Log.w("SecondActivity", "Location is: " + loc)
 
         var recyclerView : RecyclerView = findViewById(R.id.recyclerview)
 
