@@ -2,6 +2,7 @@ package com.example.weatherdiary
 
 import android.graphics.Color
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -24,9 +25,6 @@ class MyViewHolder : RecyclerView.ViewHolder {
         itemView.setOnClickListener{
             //store weather type, put in companion object to share to main activity
             WEATHER_TYPE = weatherTypeView.text.toString()
-
-            itemView.setBackgroundColor(Color.parseColor("#FFBB86FC"))
         }
     }
-
 }
