@@ -63,8 +63,8 @@ class Entries : AppCompatActivity() {
                 }
             }
         }
-        //var newEntry =MainActivity.entry
-        //entriesList.add(newEntry)
+        var newEntry = SecondActivity.entry
+        entriesList.add(newEntry)
         // write this entries to data
         var entriesSave =""
         for (entry in entriesList) {
