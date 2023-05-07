@@ -2,6 +2,7 @@ package com.example.weatherdiary
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -120,10 +121,12 @@ class SecondActivity : AppCompatActivity() {
         var temperature : EditText = findViewById(R.id.temperature)
         var date : TextView = findViewById(R.id.selectedDateButton)
         var weatherType = MyViewHolder.WEATHER_TYPE
+        var valid : Boolean = true
 
         if(temperature.text.isEmpty() || weatherType.isEmpty()){
             var initToast : Toast = Toast.makeText(this, "Please Submit Something For All Fields", Toast.LENGTH_LONG)
             initToast.show()
+            valid = false
             return
         }
 
@@ -131,5 +134,11 @@ class SecondActivity : AppCompatActivity() {
             temperature.text,
             date.text,
             weatherType).toString())
+
+        if(valid){
+            var myIntent : Intent = Intent( this, Entries::class.java )
+            startActivity( myIntent )
+            overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
+        }
     }
 }
