@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapsActivity">
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        style="@style/TextStyle"
+        />
+
+    <EditText
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter Temperature Here"
+        android:inputType="number"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        style="@style/TextStyle"
+        android:layout_below="@+id/location" />
+
+    <TextView
+        android:id="@+id/weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Weather: "
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        style="@style/TextStyle"
+        android:layout_below="@+id/temperature" />
+
+    <TextView
+        android:id="@+id/selectedWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="   "
+        android:layout_marginTop="30dp"
+        android:layout_toRightOf="@id/weather"
+        android:layout_marginLeft="10dp"
+        style="@style/TextStyle"
+        android:layout_below="@+id/temperature" />
+
+    <TextView
+        android:id="@+id/selectedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date:"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        style="@style/TextStyle"
+        android:layout_below="@+id/weather" />
+
+    <TextView
+        android:id="@+id/selectedDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        style="?android:spinnerStyle"
+        android:textSize="30dp"
+        android:layout_below="@+id/weather"
+        android:onClick="datePicker"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/recyclerview"
+        android:layout_below="@id/selectedDate"/>
+
+    <TextView
+        android:id="@+id/button"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Journal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        style="@style/ButtonStyle"
+        android:layout_below="@+id/recyclerview"
+        android:onClick="saveItems"/>
+
+
+
+</RelativeLayout>
