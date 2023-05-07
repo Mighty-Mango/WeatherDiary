@@ -56,6 +56,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         locButton = findViewById(R.id.gotoview2) //button to transfer to second view + pass cityState
         listButton = findViewById(R.id.gotoview3) //button to go directly to diary list
 
+        // transition
         locButton.setOnClickListener{
             Log.w("BUTTON", "Go to second view")
           //  Log.w("BUTTON", "City, State is " + cityState)
@@ -63,7 +64,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             var myIntent : Intent = Intent( this, SecondActivity::class.java )
             myIntent.putExtra("location", CITY_STATE)
             startActivity( myIntent )
-
+            overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
         }
 
         listButton.setOnClickListener{
@@ -117,7 +118,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
         //no need for fine location, just asking for COARSE_LOCATION perm
 
-        if (ContextCompat.checkSelfPermission(this.applicationContext,
+        if(ContextCompat.checkSelfPermission(this.applicationContext,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
         } else {
