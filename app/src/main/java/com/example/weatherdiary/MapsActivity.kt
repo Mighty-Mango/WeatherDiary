@@ -39,7 +39,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var listButton : Button
 
     //currently testing permissions like we did in class
-
     private var permission : String = Manifest.permission.ACCESS_COARSE_LOCATION
     private lateinit var launcher : ActivityResultLauncher<String>
 
@@ -83,17 +82,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
         locButton.setOnClickListener{
             Log.w("BUTTON", "Go to second view")
-            //  Log.w("BUTTON", "City, State is " + cityState)
             Log.w("BUTTON", "City State Companion: " + CITY_STATE)
             var myIntent : Intent = Intent( this, SecondActivity::class.java )
             myIntent.putExtra("location", CITY_STATE)
             startActivity( myIntent )
+            //overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
         }
 
         listButton.setOnClickListener{
             Log.w("BUTTON", "Go to third view")
         }
-
     }
 
 
@@ -170,9 +168,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-
     //taken from Google Maps API sample (editied to fit this)
-
     private fun getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
