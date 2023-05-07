@@ -143,6 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
+    //taken from Google Maps API sample (editied to fit this)
     private fun updateLocationUI() {
         if (mMap == null) {
             Log.w("MapsActivity", "Somehow you managed to have a null map")
@@ -168,6 +169,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             Log.e("Exception: %s", e.message, e)
         }
     }
+
+
+    //taken from Google Maps API sample (editied to fit this)
 
     private fun getDeviceLocation() {
         /*
@@ -199,6 +203,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                                 locMarker.position.longitude, 5, handler)
                         }
                     } else {
+                        //loc perm allowed but last loc unavailable
                         Log.w("MapsActivity", "Last Location Unknown, using default loc")
                         setDefaultLoc()
                         //use default(UMD) if location permissions not allowed or last location not available
@@ -213,6 +218,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
+    //funtion to set defualt location when loc perm not allowed or last loc
+    //not available.
     private fun setDefaultLoc() : Unit{
 
         mMap.clear()
