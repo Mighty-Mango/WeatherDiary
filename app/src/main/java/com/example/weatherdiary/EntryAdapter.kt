@@ -38,6 +38,21 @@ class EntryAdapter():BaseAdapter() {
         val temperatureTextView = rowView.findViewById(R.id.temperature) as TextView
         val thumbnailImageView = rowView.findViewById(R.id.list_thumbnail) as ImageView
         val entry = getItem(p0) as Entry
+        if (entry.weather == "Sunny") {
+            thumbnailImageView.setImageResource(R.drawable.sunny)
+        }
+        else if (entry.weather == "Sunny With Rain") {
+            thumbnailImageView.setImageResource(R.drawable.sunnyrainy)
+        }
+        else if (entry.weather == "Thunderstorms") {
+            thumbnailImageView.setImageResource(R.drawable.thunderstorm)
+        }
+        else if (entry.weather == "Snow") {
+            thumbnailImageView.setImageResource(R.drawable.cloudysnowy)
+        }
+        else if (entry.weather == "Partly Cloudy") {
+            thumbnailImageView.setImageResource(R.drawable.partlycloudy)
+        }
         dateTextView.text = entry.date
         locationTextView.text = entry.location
         temperatureTextView.text = entry.temperature.toString()
