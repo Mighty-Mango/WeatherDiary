@@ -148,5 +148,6 @@ class SecondActivity : AppCompatActivity() {
 
     companion object {
         lateinit var entry : Entry
+
     }
 }
