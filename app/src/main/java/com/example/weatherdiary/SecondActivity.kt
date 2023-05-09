@@ -34,9 +34,6 @@ class SecondActivity : AppCompatActivity() {
         location = findViewById(R.id.location)
         location.text = MapsActivity.CITY_STATE
 
-        var loc:String = intent.extras?.getString("location") ?: "No location found"
-        Log.w("SecondActivity", "Location is: " + loc)
-
         var recyclerView : RecyclerView = findViewById(R.id.recyclerview)
 
         var items = arrayListOf<Item>()
