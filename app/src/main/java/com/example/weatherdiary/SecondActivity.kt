@@ -2,6 +2,7 @@ package com.example.weatherdiary
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +21,7 @@ class SecondActivity : AppCompatActivity() {
 
     private var tempString = "INVALID"
     private var dateString = "INVALID"
-    private var weatherString = "INVALID"
+    private var locString = "INVALID"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +108,6 @@ class SecondActivity : AppCompatActivity() {
             return "NOC"
         if(month == 11)
             return "DEC"
-
         return "JAN"
     }
 
@@ -117,19 +117,36 @@ class SecondActivity : AppCompatActivity() {
 
     fun saveItems(view : View){
         location = findViewById(R.id.location)
-        var temperature : EditText = findViewById(R.id.temperature)
-        var date : TextView = findViewById(R.id.selectedDateButton)
-        var weatherType = MyViewHolder.WEATHER_TYPE
+        val temperature : EditText = findViewById(R.id.temperature)
+        val date : TextView = findViewById(R.id.selectedDateButton)
+        val weatherType = MyViewHolder.WEATHER_TYPE
+        var valid : Boolean = true
 
         if(temperature.text.isEmpty() || weatherType.isEmpty()){
-            var initToast : Toast = Toast.makeText(this, "Please Submit Something For All Fields", Toast.LENGTH_LONG)
+            val initToast : Toast = Toast.makeText(this, "Please Submit Something For All Fields", Toast.LENGTH_LONG)
             initToast.show()
             return
         }
+        dateString = date.text.toString()
+        locString = location.text.toString()
+        tempString = temperature.text.toString()
+        Log.v("entry",dateString)
+        Log.v("entry",locString)
+        Log.v("entry",tempString)
+        Log.v("entry",weatherType)
+        entry = Entry(dateString,
+            locString,
+            tempString,
+            weatherType)
 
-        Log.w("CMSC", arrayListOf<CharSequence>(location.text,
-            temperature.text,
-            date.text,
-            weatherType).toString())
+        if(valid){
+            val myIntent : Intent = Intent( this, Entries::class.java )
+            startActivity( myIntent )
+            overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
+        }
+    }
+
+    companion object {
+        lateinit var entry : Entry
     }
 }
