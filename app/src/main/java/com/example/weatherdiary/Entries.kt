@@ -3,6 +3,7 @@ package com.example.weatherdiary
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
@@ -24,21 +25,28 @@ class Entries : AppCompatActivity() {
                 Context.MODE_PRIVATE )
         var editor : SharedPreferences.Editor = pref.edit()
         var pastEntries=( pref.getString("pastEntries","") )
+
+        //for ads
+
         //unpacking
         if (pastEntries!=null) {
             var lis = pastEntries.split("$")
             println(lis)
             for (i in lis) {
-                var reslis = i.split(",")
+                var reslis = i.split("-")
                 //print(reslis)
                 if (reslis.size >1) {
-                    var n = Entry(reslis[0],reslis[1],reslis[2],reslis[3])
+                    var n = Entry(reslis[0],reslis[1],reslis[2],reslis[3],reslis[4])
                     entriesList.add(n)
                 }
             }
         }
-        //var newEntry =MainActivity.entry
-        //entriesList.add(newEntry)
+
+        var newEntry: Entry
+        if (SecondActivity.entry!=null) {
+            var newEntry = SecondActivity.entry
+            entriesList.add(newEntry)
+        }
         // write this entries to data
         var entriesSave =""
         for (entry in entriesList) {

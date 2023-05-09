@@ -137,7 +137,7 @@ class SecondActivity : AppCompatActivity() {
         entry = Entry(dateString,
             locString,
             tempString,
-            weatherType)
+            weatherType,"description")
 
         if(valid){
             val myIntent : Intent = Intent( this, Entries::class.java )

@@ -36,6 +36,7 @@ class EntryAdapter():BaseAdapter() {
 
         val locationTextView = rowView.findViewById(R.id.location) as TextView
         val temperatureTextView = rowView.findViewById(R.id.temperature) as TextView
+        val descTextView = rowView.findViewById(R.id.desc) as TextView
         val thumbnailImageView = rowView.findViewById(R.id.list_thumbnail) as ImageView
         val entry = getItem(p0) as Entry
         if (entry.weather == "Sunny") {
@@ -56,6 +57,7 @@ class EntryAdapter():BaseAdapter() {
         dateTextView.text = entry.date
         locationTextView.text = entry.location
         temperatureTextView.text = entry.temperature.toString()
+        descTextView.text = entry.desc
         return rowView
     }
 

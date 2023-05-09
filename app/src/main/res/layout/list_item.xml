@@ -61,17 +61,31 @@
       tools:text="Title" />
 
     <TextView
-      android:id="@+id/location"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/date"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
-      android:layout_marginTop="2dp"
-      android:ellipsize="end"
-      android:maxLines="3"
-      android:textSize="16sp"
-      tools:text="Subtitle" />
+
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="8dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textSize="16sp"
+        tools:text="Location" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="22dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textSize="16sp"
+        tools:text="Desc" />
 
   </RelativeLayout>
 </RelativeLayout>
