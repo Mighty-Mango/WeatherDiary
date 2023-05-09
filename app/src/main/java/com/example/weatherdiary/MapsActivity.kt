@@ -40,6 +40,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     private var permission : String = Manifest.permission.ACCESS_COARSE_LOCATION
     private lateinit var launcher : ActivityResultLauncher<String>
 
+    private lateinit var geocoder : Geocoder //= Geocoder( this )
+    private lateinit var handler : GeocodingHandler// = GeocodingHandler()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -106,8 +110,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         mMap.uiSettings.isZoomControlsEnabled = true //allow zoom buttons
         updateLocationUI()
 
-        var geocoder : Geocoder = Geocoder( this )
-        var handler : GeocodingHandler = GeocodingHandler()
+//        var geocoder : Geocoder = Geocoder( this )
+//        var handler : GeocodingHandler = GeocodingHandler()
+
+        geocoder = Geocoder( this )
+        handler = GeocodingHandler()
 
         mMap.setOnMapClickListener {
             Log.w("MapsActivity", "LatLong is: $it")
@@ -145,12 +152,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                 mMap.isMyLocationEnabled = true
                 mMap.uiSettings.isMyLocationButtonEnabled = true
 
-                Log.w("TESTING", "Permission Granted")
+                Log.w("MapsActivity", "Permission Granted")
             } else {
                 mMap.isMyLocationEnabled = false
                 mMap.uiSettings.isMyLocationButtonEnabled = false
 
-                Log.w("TESTING", "NO Permission Granted")
+                Log.w("MapsActivity", "NO Permission Granted")
             }
 
             getDeviceLocation()
@@ -184,8 +191,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                             Log.w("MapsActivity", "MARKER HAS BEEN SET TO LAST LOC")
 
                             //adding geocoder code here to ensure phone location can be chosen w/o user clicking on screen
-                            var geocoder : Geocoder = Geocoder( this )
-                            var handler : GeocodingHandler = GeocodingHandler()
+//                            var geocoder : Geocoder = Geocoder( this )
+//                            var handler : GeocodingHandler = GeocodingHandler()
                             geocoder.getFromLocation(locMarker.position.latitude,
                                 locMarker.position.longitude, 5, handler)
                         }
