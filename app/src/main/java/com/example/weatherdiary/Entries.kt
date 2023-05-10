@@ -19,7 +19,6 @@ class Entries : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.entries)
-
         val btn_click_me = findViewById(R.id.button_id) as Button
         val clear_btn = findViewById(R.id.button_clear) as Button
         val lv = findViewById(R.id.list) as ListView
@@ -28,6 +27,7 @@ class Entries : AppCompatActivity() {
                 Context.MODE_PRIVATE )
         var editor : SharedPreferences.Editor = pref.edit()
         var pastEntries=( pref.getString("pastEntries","") )
+
 
         //for ads
         var adView: AdView = AdView(this)
@@ -55,16 +55,28 @@ class Entries : AppCompatActivity() {
             var lis = pastEntries.split("$")
             println(lis)
             for (i in lis) {
-                var reslis = i.split(",")
-                //print(reslis)
+                var reslis = i.split("-")
                 if (reslis.size >1) {
-                    var n = Entry(reslis[0],reslis[1],reslis[2],reslis[3])
-                    entriesList.add(n)
+                    if (reslis.size == 5) {
+                        var n = Entry(reslis[0],reslis[1],reslis[2],reslis[3],reslis[4])
+                        entriesList.add(n)
+                    }
+                    else {
+                        var n = Entry(reslis[0],reslis[1],reslis[2],reslis[3], "notsaved")
+                        entriesList.add(n)
+                    }
+
+
                 }
             }
         }
-        var newEntry = SecondActivity.entry
-        entriesList.add(newEntry)
+        try {
+            var newEntry = SecondActivity.entry
+            entriesList.add(newEntry)
+        } catch (e:Exception) {
+            Log.w("tag","from view 1")
+        }
+
         // write this entries to data
         var entriesSave =""
         for (entry in entriesList) {

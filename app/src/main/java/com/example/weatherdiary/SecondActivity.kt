@@ -105,7 +105,6 @@ class SecondActivity : AppCompatActivity() {
             return "NOC"
         if(month == 11)
             return "DEC"
-
         return "JAN"
     }
 
@@ -128,11 +127,11 @@ class SecondActivity : AppCompatActivity() {
         dateString = date.text.toString()
         locString = location.text.toString()
         tempString = temperature.text.toString()
-
         entry = Entry(dateString,
             locString,
             tempString,
-            weatherType)
+            weatherType,"description")
+
 
         if(valid){
             val myIntent : Intent = Intent( this, Entries::class.java )
@@ -140,6 +139,7 @@ class SecondActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
         }
     }
+
 
     companion object {
         lateinit var entry : Entry

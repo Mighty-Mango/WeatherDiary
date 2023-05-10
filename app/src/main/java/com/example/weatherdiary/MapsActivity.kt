@@ -79,8 +79,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
         }
 
+
         //used to go to view 3
         listButton.setOnClickListener{
+
             var myIntent2 : Intent = Intent( this, Entries::class.java )
             startActivity( myIntent2 )
             overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
