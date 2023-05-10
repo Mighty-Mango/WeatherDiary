@@ -2,6 +2,7 @@ package com.example.weatherdiary
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.ClipDescription
 import android.content.Intent
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
@@ -18,10 +19,13 @@ class SecondActivity : AppCompatActivity() {
     private lateinit var datePickerDialog : DatePickerDialog
     private lateinit var dateButton : TextView
     private lateinit var location : TextView
+    private lateinit var description: EditText
 
     private var tempString = "INVALID"
     private var dateString = "INVALID"
     private var locString = "INVALID"
+    private var descString = "INVALID"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +119,7 @@ class SecondActivity : AppCompatActivity() {
     fun saveItems(view : View){
         location = findViewById(R.id.location)
         val temperature : EditText = findViewById(R.id.temperature)
+        val comment : EditText = findViewById(R.id.comment)
         val date : TextView = findViewById(R.id.selectedDateButton)
         val weatherType = MyViewHolder.WEATHER_TYPE
         var valid : Boolean = true
@@ -127,10 +132,13 @@ class SecondActivity : AppCompatActivity() {
         dateString = date.text.toString()
         locString = location.text.toString()
         tempString = temperature.text.toString()
+        descString = comment.text.toString()
+
         entry = Entry(dateString,
             locString,
             tempString,
-            weatherType,"description")
+            weatherType,
+            descString)
 
 
         if(valid){
