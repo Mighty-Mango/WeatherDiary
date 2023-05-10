@@ -39,10 +39,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var listButton : Button //button to go straight to third view
     private var permission : String = Manifest.permission.ACCESS_COARSE_LOCATION
     private lateinit var launcher : ActivityResultLauncher<String>
-
-    private lateinit var geocoder : Geocoder //= Geocoder( this )
-    private lateinit var handler : GeocodingHandler// = GeocodingHandler()
-
+    private lateinit var geocoder : Geocoder //these two are used to get the city and state from LatLng
+    private lateinit var handler : GeocodingHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +48,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // check if permission to use the coarse loc has already been granted
+        // check if permission to use the coarse location has already been granted
         var grantedPermission : Int =
             ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION )
-        if( grantedPermission == PackageManager.PERMISSION_GRANTED ) {
-            // permission has been granted, start using the camera
-            Log.w( "MapsActivity", "permission was previously granted" )
-        } else {
-            // need to ask for permission ton use the camera
-            Log.w( "MapsActivity", "permission was NOT previously granted" )
+        if( grantedPermission != PackageManager.PERMISSION_GRANTED ) {
+            // if perm not already granted, need to ask for permission to use coarse location
             var contract : ActivityResultContracts.RequestPermission =
                 ActivityResultContracts.RequestPermission( )
             var results : Results = Results( )
@@ -71,26 +65,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        //needed for last location
+        //needed for getting the last location
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         //init buttons
         locButton = findViewById(R.id.gotoview2) //button to transfer to second view + pass cityState
         listButton = findViewById(R.id.gotoview3) //button to go directly to diary list
 
-        //used to go to view 2
+        //used to go to view 2 and pass location via companion object
         locButton.setOnClickListener{
-            Log.w("BUTTON", "Go to second view")
-            Log.w("BUTTON", "City State Companion: " + CITY_STATE)
-
             var myIntent : Intent = Intent( this, SecondActivity::class.java )
             startActivity( myIntent )
             overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
         }
 
+
         //used to go to view 3
         listButton.setOnClickListener{
-            Log.w("BUTTON", "Go to third view")
+
             var myIntent2 : Intent = Intent( this, Entries::class.java )
             startActivity( myIntent2 )
             overridePendingTransition(R.anim.anim_one,R.anim.anim_two)
@@ -110,14 +102,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         mMap.uiSettings.isZoomControlsEnabled = true //allow zoom buttons
         updateLocationUI()
 
-//        var geocoder : Geocoder = Geocoder( this )
-//        var handler : GeocodingHandler = GeocodingHandler()
-
-        geocoder = Geocoder( this )
+        geocoder = Geocoder( this )  //init geocoder for entire activity
         handler = GeocodingHandler()
 
+        //erase old marker and set new marker to location that user clicked.
         mMap.setOnMapClickListener {
-            Log.w("MapsActivity", "LatLong is: $it")
             mMap.clear()
             locMarker = mMap.addMarker(MarkerOptions().position(it))!! //lets see if this causes issues
             mMap.moveCamera(CameraUpdateFactory.newLatLng(it)) //center camera
@@ -127,37 +116,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
         }
     }
+
     //permissions
     inner class Results : ActivityResultCallback<Boolean> {
         override fun onActivityResult(result: Boolean?) {
-            if( result != null && result == true ) {
-                Log.w("MapsActivity", "Permission Granted !!!")
-                locationPermissionGranted = true
-            }else {
-                Log.w("MapsActivity", "Sorry, permission NOT granted")
-                locationPermissionGranted = false
-            }
+            locationPermissionGranted = result != null && result == true
             updateLocationUI()
         }
     }
 
-    //updateUI and deviceLocation taken from Google Maps API sample
+    //updateUI and deviceLocation taken from Google Maps API sample modified to fit our app
     private fun updateLocationUI() {
-        if (mMap == null) {
-            Log.w("MapsActivity", "Somehow you managed to have a null map")
-            return
-        }
         try {
             if (locationPermissionGranted) {
                 mMap.isMyLocationEnabled = true
                 mMap.uiSettings.isMyLocationButtonEnabled = true
-
-                Log.w("MapsActivity", "Permission Granted")
             } else {
                 mMap.isMyLocationEnabled = false
                 mMap.uiSettings.isMyLocationButtonEnabled = false
-
-                Log.w("MapsActivity", "NO Permission Granted")
             }
 
             getDeviceLocation()
@@ -167,11 +143,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         }
     }
 
-    //taken from Google Maps API sample (edited to fit this)
+    //this fun was taken from Google Maps API sample (edited to fit this)
     private fun getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
+         * cases when a location is not available. If not available (or permission not granted),
+         * uses the default location which is College Park, MD / UMD
          */
         try {
             if (locationPermissionGranted) {
@@ -188,19 +165,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                             locMarker = mMap.addMarker(
                                 MarkerOptions().position(
                                     LatLng(lastKnownLocation!!.latitude,lastKnownLocation!!.longitude)))!!
-                            Log.w("MapsActivity", "MARKER HAS BEEN SET TO LAST LOC")
 
                             //adding geocoder code here to ensure phone location can be chosen w/o user clicking on screen
-//                            var geocoder : Geocoder = Geocoder( this )
-//                            var handler : GeocodingHandler = GeocodingHandler()
                             geocoder.getFromLocation(locMarker.position.latitude,
                                 locMarker.position.longitude, 5, handler)
                         }
                     } else {
                         //loc perm allowed but last loc unavailable
-                        Log.w("MapsActivity", "Last Location Unknown, using default loc")
                         setDefaultLoc()
-                        //uses default location(UMD) if location permissions not allowed or last location not available
                     }
                 }
             }
@@ -228,9 +200,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
                 var cityAdd : String = addresses[0].locality //city
                 var stateAdd : String = addresses[0].adminArea //state
                 CITY_STATE = "$cityAdd, $stateAdd" //combined to be: city, state
-                Log.w("MapsActivity", "City and state: $CITY_STATE")
-            } else
-                Log.w( "MapsActivity", "Sorry, no results" )
+            }
         }
     }
 

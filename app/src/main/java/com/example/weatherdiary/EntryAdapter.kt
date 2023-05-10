@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import org.w3c.dom.Text
 
 class EntryAdapter():BaseAdapter() {
     var context: Context? = null
@@ -36,11 +37,29 @@ class EntryAdapter():BaseAdapter() {
 
         val locationTextView = rowView.findViewById(R.id.location) as TextView
         val temperatureTextView = rowView.findViewById(R.id.temperature) as TextView
+        val descTextView = rowView.findViewById(R.id.desc) as TextView
         val thumbnailImageView = rowView.findViewById(R.id.list_thumbnail) as ImageView
+        val tempLabel = rowView.findViewById(R.id.degrees) as TextView
         val entry = getItem(p0) as Entry
+        if (entry.weather == "Sunny") {
+            thumbnailImageView.setImageResource(R.drawable.sunny)
+        }
+        else if (entry.weather == "Sunny With Rain") {
+            thumbnailImageView.setImageResource(R.drawable.sunnyrainy)
+        }
+        else if (entry.weather == "Thunderstorms") {
+            thumbnailImageView.setImageResource(R.drawable.thunderstorm)
+        }
+        else if (entry.weather == "Snow") {
+            thumbnailImageView.setImageResource(R.drawable.cloudysnowy)
+        }
+        else if (entry.weather == "Partly Cloudy") {
+            thumbnailImageView.setImageResource(R.drawable.partlycloudy)
+        }
         dateTextView.text = entry.date
         locationTextView.text = entry.location
-        temperatureTextView.text = entry.temperature.toString()
+        temperatureTextView.text = entry.temperature
+        descTextView.text = entry.desc
         return rowView
     }
 
