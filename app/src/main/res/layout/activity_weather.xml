@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
+        android:text="Location"
         style="@style/TextStyle"
         />
 
@@ -69,12 +70,23 @@
         android:layout_below="@+id/weather"
         android:onClick="datePicker"/>
 
+    <EditText
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter thoughts for the day!"
+        android:maxLength="23"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        style="@style/TextStyle"
+        android:layout_below="@+id/selectedDate" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:id="@+id/recyclerview"
-        android:layout_below="@id/selectedDate"/>
+        android:layout_below="@id/comment"/>
 
     <TextView
         android:id="@+id/button"
