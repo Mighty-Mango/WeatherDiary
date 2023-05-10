@@ -34,9 +34,6 @@ class SecondActivity : AppCompatActivity() {
         location = findViewById(R.id.location)
         location.text = MapsActivity.CITY_STATE
 
-        var loc:String = intent.extras?.getString("location") ?: "No location found"
-        Log.w("SecondActivity", "Location is: " + loc)
-
         var recyclerView : RecyclerView = findViewById(R.id.recyclerview)
 
         var items = arrayListOf<Item>()
@@ -135,6 +132,7 @@ class SecondActivity : AppCompatActivity() {
             tempString,
             weatherType,"description")
 
+
         if(valid){
             val myIntent : Intent = Intent( this, Entries::class.java )
             startActivity( myIntent )
@@ -142,8 +140,8 @@ class SecondActivity : AppCompatActivity() {
         }
     }
 
+
     companion object {
         lateinit var entry : Entry
-
     }
 }

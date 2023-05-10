@@ -9,6 +9,9 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 
 class Entries : AppCompatActivity() {
     var entriesList = ArrayList<Entry>()
@@ -25,6 +28,27 @@ class Entries : AppCompatActivity() {
         var editor : SharedPreferences.Editor = pref.edit()
         var pastEntries=( pref.getString("pastEntries","") )
 
+
+        //for ads
+        var adView: AdView = AdView(this)
+        var adSize:AdSize = AdSize(AdSize.FULL_WIDTH,AdSize.AUTO_HEIGHT)
+        adView.setAdSize(adSize)
+        var adUnitId : String = "ca-app-pub-3940256099942544/6300978111"
+        adView.adUnitId = adUnitId
+
+        var builder: AdRequest.Builder = AdRequest.Builder()
+        builder.addKeyword("workout")
+        builder.addKeyword("gaming")
+        var request : AdRequest = builder.build()
+
+        var adLayout : LinearLayout = findViewById<LinearLayout>(R.id.ad_view)
+        adLayout.addView(adView)
+
+        try{
+            adView.loadAd(request)
+        } catch(e:Exception){
+            Log.w("Entries","Ad failed to load")
+        }
 
         //unpacking
         if (pastEntries!=null) {
@@ -52,6 +76,7 @@ class Entries : AppCompatActivity() {
         } catch (e:Exception) {
             Log.w("tag","from view 1")
         }
+
         // write this entries to data
         var entriesSave =""
         for (entry in entriesList) {
