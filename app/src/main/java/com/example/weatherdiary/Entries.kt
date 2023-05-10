@@ -16,7 +16,6 @@ class Entries : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.entries)
-
         val btn_click_me = findViewById(R.id.button_id) as Button
         val clear_btn = findViewById(R.id.button_clear) as Button
         val lv = findViewById(R.id.list) as ListView
@@ -26,7 +25,6 @@ class Entries : AppCompatActivity() {
         var editor : SharedPreferences.Editor = pref.edit()
         var pastEntries=( pref.getString("pastEntries","") )
 
-        //for ads
 
         //unpacking
         if (pastEntries!=null) {
@@ -34,7 +32,6 @@ class Entries : AppCompatActivity() {
             println(lis)
             for (i in lis) {
                 var reslis = i.split("-")
-                //print(reslis)
                 if (reslis.size >1) {
                     if (reslis.size == 5) {
                         var n = Entry(reslis[0],reslis[1],reslis[2],reslis[3],reslis[4])

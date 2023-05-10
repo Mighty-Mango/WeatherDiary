@@ -130,10 +130,6 @@ class SecondActivity : AppCompatActivity() {
         dateString = date.text.toString()
         locString = location.text.toString()
         tempString = temperature.text.toString()
-        Log.v("entry",dateString)
-        Log.v("entry",locString)
-        Log.v("entry",tempString)
-        Log.v("entry",weatherType)
         entry = Entry(dateString,
             locString,
             tempString,

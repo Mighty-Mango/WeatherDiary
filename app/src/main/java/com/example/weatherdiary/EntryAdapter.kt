@@ -58,7 +58,7 @@ class EntryAdapter():BaseAdapter() {
         }
         dateTextView.text = entry.date
         locationTextView.text = entry.location
-        temperatureTextView.text = entry.temperature.toString()
+        temperatureTextView.text = entry.temperature
         descTextView.text = entry.desc
         return rowView
     }
